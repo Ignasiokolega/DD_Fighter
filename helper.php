@@ -23,24 +23,41 @@
             if($result1 = @$connection->query($find_id)){
                 $record1 = $result1->fetch_assoc();
                 $user_id = $record1["id"];
+            } else {
+            $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend";    
+            header("bingo.php");
             }
 
-            $creating_bingo = "SELECT contents FROM bingos WHERE character_name = '$name' AND user_id = '$user_id' ORDER BY id";
+$find_name = "SELECT * FROM kaufen WHERE name = '$name'";
 
-        
-            
-                $results_array = [];
-                $result2 = $connection->query($creating_bingo);
-                while ($row = $result2->fetch_assoc()) {
-                    $row = array_shift($row);
-                $results_array[] = $row;
-}
-                $_SESSION["new_bingo"] = $results_array;
-                header("Location: bingo.php");
-            
-            
+    if($result1 = @$connection->query($find_name)){
+
+        //existing heroes
+
+        $exist_hero = $result1->num_rows;
+
+        if($exist_hero > 0) {
+            $_SESSION["err_name"] = "<span style='color: red'>That's name is already taken.</span>";
+            header("Location: index.php");
         }
-    $connection->close();
 
-    
+        $str = $_POST["str"];
+        $dex = $_POST["dex"];
+        $con = $_POST["con"];
+        $int = $_POST["int"];
+        $wis = $_POST["wis"];
+        $cha = $_POST["cha"];
+        $times = $_POST["times"];
+        $strenght = $_POST["strenght"];
+        $add = $_POST["-/+"];
+        $to_add = $_POST["addition"];
+
+        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$user_id','$name','$str','$dex','$con','$int','$wis','$cha','$times','$strenght','$add','$to_add')";
+        if($result2 = @$connection->query($creating_hero)){
+            $_SESSION["completed_character"] = 1;
+            header("Location: index.php");
+        }
+    }
+}
+$connection->close();
 ?>

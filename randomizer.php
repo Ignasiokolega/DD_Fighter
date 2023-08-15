@@ -1,5 +1,7 @@
 <?php
-include_once "connect.php";
+session_start();
+require_once "connect.php";
+
 
 $connection = @new mysqli($host , $db_user , $db_password , $db_name);
 
@@ -10,14 +12,16 @@ echo "Error " . $connection->connect_errno;
 
     $name = $_POST["name"];
     $username = $_SESSION['username'];
+    $find_id = "SELECT id FROM users WHERE username = '$username'";
+
     if($result1 = @$connection->query($find_id)){
         $record1 = $result1->fetch_assoc();
         $user_id = $record1["id"];
     } else {
-        $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend";    
+        $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend. If you don't know what that means, please contact with our support or create account";    
         header("DD_fight");
         }
-$find_name = "SELECT * FROM data WHERE name = '$name' AND user_id = '$user_id";
+$find_name = "SELECT * FROM kaufen WHERE name = '$name' AND user_id = '$user_id'";
 
 
     if($result1 = @$connection->query($find_name)){
@@ -29,6 +33,7 @@ $find_name = "SELECT * FROM data WHERE name = '$name' AND user_id = '$user_id";
         if($exist_hero > 0) {
             $_SESSION["err_name"] = "<span style='color: red'>That's name is already taken.</span>";
             header("Location: index.php");
+            exit();
         }
 
             $stats = ['+3','-2','+0','+2','+1','+1'];
@@ -94,7 +99,7 @@ $find_name = "SELECT * FROM data WHERE name = '$name' AND user_id = '$user_id";
                 $vax = ($to_add[0]);
 
             }
-        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$name','$str','$dex','$con','$int','$wis','$cha')";
+        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$user_id','$name','$str','$dex','$con','$int','$wis','$cha','$times','$van','$add','$vax')";
         if($result2 = @$connection->query($creating_hero)){
             $_SESSION["completed_character"] = 1;
             header("Location: index.php");

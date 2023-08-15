@@ -15,7 +15,7 @@ if (isset($_SESSION["status"]) && $_SESSION["status"] === true) {
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bingo!</title>
+    <title>D&D Fight Simple Fight Executor</title>
     <link rel="styleheet" href="style.css">
  </head>
   <body>
