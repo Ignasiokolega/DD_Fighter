@@ -138,7 +138,7 @@ session_start();
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Palace</title>
+    <title>D&D Fight - Registration Page</title>
     <link rel='stylesheet' href='style.css'>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
@@ -177,7 +177,7 @@ if(isset($_SESSION["e_password"])){
 
 <label>
   <input name="terms" type="checkbox">
-I have read the terms and conditions of <a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUXbmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D' target='_blank'>Palace</a>
+I have read the terms and conditions of <a href='terms.php' target='_blank'>DD_FIght</a>
 </label><br>
 <?php
 if(isset($_SESSION["e_terms"])){

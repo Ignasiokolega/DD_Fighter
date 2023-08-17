@@ -26,8 +26,8 @@
             $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend";    
             header("bingo.php");
             }
-            $hero_stats1 = "SELECT contents FROM bingos WHERE character_name = '$name1' AND user_id = '$user_id' ORDER BY id";
-            $hero_stats2 = "SELECT contents FROM bingos WHERE character_name = '$name2' AND user_id = '$user_id' ORDER BY id";
+            $hero_stats1 = "SELECT * FROM kaufen WHERE name = '$name1' AND user_id = '$user_id'";
+            $hero_stats2 = "SELECT * FROM kaufen WHERE name = '$name2' AND user_id = '$user_id'";
         
             $results_array1 = [];
             $result2 = $connection->query($hero_stats1);
@@ -44,8 +44,9 @@
             $_SESSION["hero1"] = $results_array1;
             $_SESSION["hero2"] = $results_array2;
             header("Location: DD_fight.php");
-            
-            
+            $_SESSION['hp1'] = $_POST['hp1'];
+            $_SESSION['hp2'] = $_POST['hp2'];
+        
         }
     $connection->close();
 
