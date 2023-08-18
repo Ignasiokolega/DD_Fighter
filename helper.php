@@ -15,11 +15,10 @@
         
         } else {
 
-            $name = $_POST["name"];
+            $name1 = $_POST["name1"];
+            $name2 = $_POST["name2"];
             $username = $_SESSION['username'];
-
             $find_id = "SELECT id FROM users WHERE username = '$username'";
-
             if($result1 = @$connection->query($find_id)){
                 $record1 = $result1->fetch_assoc();
                 $user_id = $record1["id"];
@@ -27,37 +26,30 @@
             $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend";    
             header("bingo.php");
             }
-
-$find_name = "SELECT * FROM kaufen WHERE name = '$name'";
-
-    if($result1 = @$connection->query($find_name)){
-
-        //existing heroes
-
-        $exist_hero = $result1->num_rows;
-
-        if($exist_hero > 0) {
-            $_SESSION["err_name"] = "<span style='color: red'>That's name is already taken.</span>";
-            header("Location: index.php");
-        }
-
-        $str = $_POST["str"];
-        $dex = $_POST["dex"];
-        $con = $_POST["con"];
-        $int = $_POST["int"];
-        $wis = $_POST["wis"];
-        $cha = $_POST["cha"];
-        $times = $_POST["times"];
-        $strenght = $_POST["strenght"];
-        $add = $_POST["-/+"];
-        $to_add = $_POST["addition"];
-
-        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$user_id','$name','$str','$dex','$con','$int','$wis','$cha','$times','$strenght','$add','$to_add')";
-        if($result2 = @$connection->query($creating_hero)){
-            $_SESSION["completed_character"] = 1;
-            header("Location: index.php");
-        }
-    }
+            $hero_stats1 = "SELECT * FROM kaufen WHERE name = '$name1' AND user_id = '$user_id'";
+            $hero_stats2 = "SELECT * FROM kaufen WHERE name = '$name2' AND user_id = '$user_id'";
+        
+            $results_array1 = [];
+            $result2 = $connection->query($hero_stats1);
+            while ($row = $result2->fetch_assoc()) {
+                $row = array_shift($row);
+            $results_array[] = $row;
 }
-$connection->close();
+            $results_array2 = [];
+            $result3 = $connection->query($hero_stats2);
+            while ($row = $result3->fetch_assoc()) {
+                $row = array_shift($row);
+            $results_array[] = $row;
+}
+            $_SESSION["hero1"] = $results_array1;
+            $_SESSION["hero2"] = $results_array2;
+            header("Location: DD_fight.php");
+            $_SESSION['hp1'] = $_POST['hp1'];
+            $_SESSION['hp2'] = $_POST['hp2'];
+        
+        }
+    $connection->close();
+
+    
 ?>
+

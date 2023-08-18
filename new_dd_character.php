@@ -5,27 +5,30 @@
         header('Location: index.php');
         exit();
       }
+    require_once 'connect.php';
 
-require_once "connect.php";
+    $connection = @new mysqli($host, $db_user, $db_password, $db_name);
 
-$connection = @new mysqli($host , $db_user , $db_password , $db_name);
+        if ($connection->connect_errno !== 0)
+        {
+        echo "Error " . $connection->connect_errno;
+        
+        } else {
 
-if ($connection->connect_errno !== 0)
-{
-echo "Error " . $connection->connect_errno;
-} else {
+            $name = $_POST["name"];
+            $username = $_SESSION['username'];
 
-    $name = $_POST["name"];
-    $username = $_SESSION['username'];
+            $find_id = "SELECT id FROM users WHERE username = '$username'";
 
-    $find_id = "SELECT id FROM users WHERE username = '$username'";
+            if($result1 = @$connection->query($find_id)){
+                $record1 = $result1->fetch_assoc();
+                $user_id = $record1["id"];
+            } else {
+            $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend";    
+            header("bingo.php");
+            }
 
-    if($result1 = @$connection->query($find_id)){
-        $record1 = $result1->fetch_assoc();
-        $user_id = $record1["id"];
-    }
-$find_name = "SELECT * FROM kaufen WHERE name = '$name' AND user_id = '$user_id'";
-
+$find_name = "SELECT * FROM kaufen WHERE name = '$name'";
 
     if($result1 = @$connection->query($find_name)){
 
@@ -34,7 +37,7 @@ $find_name = "SELECT * FROM kaufen WHERE name = '$name' AND user_id = '$user_id'
         $exist_hero = $result1->num_rows;
 
         if($exist_hero > 0) {
-            $_SESSION["err_name"] = "<span style='color: red'>You can't have two characters with same name!</span>";
+            $_SESSION["err_name"] = "<span style='color: red'>That's name is already taken.</span>";
             header("Location: index.php");
         }
 
@@ -44,11 +47,18 @@ $find_name = "SELECT * FROM kaufen WHERE name = '$name' AND user_id = '$user_id'
         $int = $_POST["int"];
         $wis = $_POST["wis"];
         $cha = $_POST["cha"];
-        
-        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$user_id','$name','$str','$dex','$con','$int','$wis','$cha')";
+        $times = $_POST["times"];
+        $strenght = $_POST["strenght"];
+        $add = $_POST["attack_s"];
+        $to_add = $_POST["addition"];
+        $ac = $_POST["armour_class"];
+        $ar = $_POST["attack_r"];
+        $ra = $_POST["roll_add"];
+
+        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$user_id','$name','$str','$dex','$con','$int','$wis','$cha','$times','$strenght','$add','$to_add','$ac','$ar','$ra')";
         if($result2 = @$connection->query($creating_hero)){
             $_SESSION["completed_character"] = 1;
-            header("Location: DD_fight.php");
+            header("Location: index.php");
         }
     }
 }

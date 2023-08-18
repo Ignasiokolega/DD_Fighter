@@ -68,11 +68,12 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
  <!--NEW CHARACTER FORM-->
          
 
-            <h2><p> Do you want  to add D&D character? No problem. Just fill up the form</p></h2>
+                <h2><p> Do you want  to add D&D character? No problem. Just fill up the form</p></h2>
 
-            STATS AND NAME:
-            <form action="helper.php" method="post">
-              <input type="text" name="name" required placeholder = "Name">
+             
+           <form action="new_dd_character.php" method="post">
+            NAME:   
+               <input type="text" name="name" required placeholder = "Name">
 
               <?php 
                 
@@ -81,25 +82,47 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
                   unset($_SESSION["err_name"]);
                 }
               ?>
-              <input type="text" name="str" required placeholder = "Strength" pattern='+5'>
-              <input type="text" name="dex" required placeholder = "Dexterity" pattern="[+|-][0-5]">
-              <input type="text" name="con" required placeholder = "Constitution" pattern="[+|-][0-5]">
-              <input type="text" name="int" required placeholder = "Intelligence" pattern="[+|-][0-5]">
-              <input type="text" name="wis" required placeholder = "Wisdom" pattern="[+|-][0-5]">
-              <input type="text" name="cha" required placeholder = "Charisma" pattern="[+|-][0-5]">
-              <input type="range" name="armour_class" required  min='1' max='54' oninput="this.nextElementSibling.value = this.value">
-              <input type="number" name="armour_class" required placeholder="10" pattern="[\d]+" min='1' max='54' oninput="this.nextElementSibling.value = this.value">
               <br>
-              ATTACK STRENGTH: <br>
-              <input type="int" name="times" required placeholder = "3">d 
-              <input type="int" name="strenght" required placeholder = "5">
-              <input type="radio" name="-/+" required value='+' id='+'>+
-              <input type="radio" name="-/+" required value='-' id='-'>-
-              <input type="int" name="addition" required placeholder="2"><br>
-              ATTACK ROLL: <br>
-              <input type='text' name='add' required placeholder='Armour Class'>
-              <input type='int' name='armour_class' required placeholder='Armour Class'>
-              <input type='int' name='armour_class' required placeholder='Armour Class'>
+            <h3>STATS:</h3> <br>
+              <?php 
+              @$variables = [$str,$dex,$con,$int,$wis,$cha];
+              $strings1 = ['str','dex','con','int','wis','cha'];
+              $strings2 = ['STRENGTH','DEXTERITY','CONSTITUTION','INTELLIGENCE','WISDOM','CHARISMA'];
+              $var = ['-5','-4','-3','-2','-1','+0','+1','+2','+3','+4','+5'];
+              $e = 0;
+              do{  
+              $i = 0;
+              echo $strings2[$e].":   ";  
+              echo "<select name=" . $strings1[$e] . ">";
+              do{
+              echo "<option value=" . '"' . $var[$i] . '">' . $var[$i] . "</option>";
+              $i ++;
+              } while($i <= 10); 
+              echo "</select>"."<br> <br>";
+              $e ++;
+              } while($e <= 5);
+              
+              
+              ?>
+            ARMOUR CLASS: <br>
+              <input type="range" name="armour_class" required value="10" min='1' max='54' oninput="this.nextElementSibling.value = this.value">
+              <output>10</output>
+              <br>
+            ATTACK STRENGTH: <br>
+              <input type="number" name="times" required placeholder = "1" min="1" max="100">d 
+              <input type="number" name="strenght" required placeholder = "4" min="1" max="100">
+              <select name="attack_s">
+                <option value="+">+</option>
+                <option value="-">-</option>
+              </select>
+              <input type="number" name="addition" min="0" max="999" required placeholder="3"><br>
+            ATTACK ROLL: <br>
+              <select name="attack_r">
+                <option value="+">+</option>
+                <option value="-">-</option>
+              </select>
+              <input type='number' name='roll_add' required placeholder='Addition' min="0" max="10">
+              <br>
               <input type="submit" name="checkbox" value ="Click it when you finish">
             </form>
             
@@ -142,7 +165,7 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
  <!--DELETING AND RANDOMIZING CHARACTERS FORMS-->
          <div> 
           <p> Wanna delete character? Write down it's name. <p> 
-          <form action="delete_hero.php" method="post">
+          <form action="delete_hero.php" method="post" >
             <input type="text" name="delete" required placeholder = "Name">
             <?php 
                 
@@ -152,7 +175,7 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
                 }
                 
               ?>
-              <input type="submit" name="checkbox" onsubmit="confirm('Do you really want to delete this character? You can\'t undo this');" value ="Delete">
+              <input type="submit" name="checkbox"  value ="Delete" onclick="return confirm('Do you really want to delete this character? You can\'t undo this');">
               </form>
           </div>    
          <div> 
@@ -182,7 +205,7 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
       <input type='text' name='name2' required placeholder ='John'>  
       <input type='int'  name='hp2' required placeholder = '20'> 
       <br>
-      <input type='submit' name='submit' value='I have choosen' onsubmit="confirm ('Do you really want to delete this character? You can\'t undo this');">          
+      <input type='submit' name='submit' value='I have choosen'>          
     </form>
     <table>  
       <tr>
