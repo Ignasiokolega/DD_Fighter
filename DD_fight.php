@@ -1,11 +1,12 @@
 <?php
-session_start();
-if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
-  header('Location: index.php');
-  exit();
-}
+ //Session things
+  session_start();
+  if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
+    header('Location: index.php');
+    exit();
+  }
 
-?>
+ ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -121,7 +122,7 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
                 <option value="+">+</option>
                 <option value="-">-</option>
               </select>
-              <input type='number' name='roll_add' required placeholder='Addition' min="0" max="10">
+              <input type='number' name='roll_add' required placeholder='Addition' min="0" max="41">
               <br>
               <input type="submit" name="checkbox" value ="Click it when you finish">
             </form>
@@ -162,7 +163,7 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
           }
           ?>
           </table>
- <!--DELETING AND RANDOMIZING CHARACTERS FORMS-->
+ <!--DELETING AND RANDOMIZING CHARACTERS FORMS--> 
          <div> 
           <p> Wanna delete character? Write down it's name. <p> 
           <form action="delete_hero.php" method="post" >
@@ -209,6 +210,18 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
     </form>
     <table>  
       <tr>
+        <th> Round\Info </th>
+        <th> Name of First Character </th>
+        <th> Hp after round </th>
+        <th> Damage Dealt</th>
+        <th> Damage Taken</th>
+        <th> Name of Second Character </th>
+        <th> Hp after round </th>
+        <th> Damage Dealt </th>
+        <th> Damage Taken</th>
+      </tr>
+      <tr>
+        <th>Round 0</th>
       <?php
         if(isset($_SESSION['hero1']) AND isset($_SESSION['hero2'])){
 
@@ -216,18 +229,23 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
           $hero2[] = $_SESSION['hero2'];
           $hp1 = $_SESSION['hp1'];
           $hp2 = $_SESSION['hp2'];
-          echo '<th>' . 'Info' . '</th>';
-          echo '<th>' . 'Name' . '</th>';
-          echo '<th>' . 'Hp' . '</th>';
-          echo '<th>' . 'Damage Dealt' . '</th>';
-          echo '</tr>';
           echo '<td>'.$hero1['name'].'</td>';
           echo '<td>'.$hp1.'</td>';
+          echo '<td>0</td>';
+          echo '<td>0</td>';
+          echo '<td>'.$hero2['name'].'</td>';
+          echo '<td>'.$hp2.'</td>';
+          echo '<td>0</td>';
+          echo '<td>0</td>';
+          echo '</tr>';
+          echo '<th>Round 1</th>';
+          
+
+
 
         }
-          
-  
       ?>  
+     </table>
  <!--PLACE BETWEEN-->
          <div>
 
@@ -235,7 +253,9 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
             <br>
             <br>
             <br>
-
+            <br>
+            <br>
+            <br>
           </div>
 
 
@@ -251,3 +271,44 @@ if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
  
  </body>
 </html>
+<?php
+  //function used above 
+    function count_attack($hero1, $hero2)
+    {
+    $times = $hero1['Times'];
+    $strenght = $hero1['Attack Strenght'];
+    $add1 = $hero1['+/-'];
+    $addition = $hero1['Addition'];
+    $add2 = $hero1['Hit Attempt'];
+    $addition2 = $hero1['Add'];
+    $ac = $hero1['Armour Class'];
+    $i = 1;
+    $attacks = [0];
+    do{
+    $att = random_int(1,$strenght);
+    array_push($attacks, $att);  
+    $i++;
+    } while($i <= $times);
+    $attack = [0];
+    do{
+    if(isset($attack)){ 
+    $attack += array_shift($attacks);
+    }
+    } while(count($attacks) > 0);
+    if($add1 === '+') {
+    $attack += $addition;
+    } else {
+    $attack -= $addition;  
+    } 
+    $attack_roll = random_int(1,20);
+    switch($add2){
+      case '+':
+        $attack_roll += $addition2;
+        break;
+      case '-':
+        $attack_roll -= $addition2;
+        break;
+    }
+    }
+
+ ?>
