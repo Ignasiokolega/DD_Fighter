@@ -24,7 +24,7 @@
                 $user_id = $record1["id"];
             } else {
             $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend";    
-            header("bingo.php");
+            header("DD_fight.php");
             }
             $hero_stats1 = "SELECT * FROM kaufen WHERE name = '$name1' AND user_id = '$user_id'";
             $hero_stats2 = "SELECT * FROM kaufen WHERE name = '$name2' AND user_id = '$user_id'";
@@ -32,14 +32,14 @@
             $results_array1 = [];
             $result2 = $connection->query($hero_stats1);
             while ($row = $result2->fetch_assoc()) {
-                $row = array_shift($row);
-            $results_array[] = $row;
+            //$row = array_shift($row);
+            $results_array1 = $row;
 }
             $results_array2 = [];
             $result3 = $connection->query($hero_stats2);
             while ($row = $result3->fetch_assoc()) {
-                $row = array_shift($row);
-            $results_array[] = $row;
+            //$row = array_shift($row);
+            $results_array2 = $row;
 }
             $_SESSION["hero1"] = $results_array1;
             $_SESSION["hero2"] = $results_array2;
