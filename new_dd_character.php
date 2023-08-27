@@ -47,15 +47,13 @@ $find_name = "SELECT * FROM kaufen WHERE name = '$name'";
         $int = $_POST["int"];
         $wis = $_POST["wis"];
         $cha = $_POST["cha"];
-        $times = $_POST["times"];
-        $strenght = $_POST["strenght"];
-        $add = $_POST["attack_s"];
-        $to_add = $_POST["addition"];
+        $number_D = $_POST["number_of_dices"];
+        $dice = $_POST["dice"];
+        $as = $_POST["as_bonus"];
         $ac = $_POST["armour_class"];
-        $ar = $_POST["attack_r"];
-        $ra = $_POST["roll_add"];
+        $ar = $_POST["ar_bonus"];
 
-        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$user_id','$name','$str','$dex','$con','$int','$wis','$cha','$times','$strenght','$add','$to_add','$ac','$ar','$ra')";
+        $creating_hero = "INSERT INTO kaufen VALUES (NULL,'$user_id','$name','$str','$dex','$con','$int','$wis','$cha','$number_D','$dice','$as','$ac','$ar')";
         if($result2 = @$connection->query($creating_hero)){
             $_SESSION["completed_character"] = 1;
             header("Location: index.php");

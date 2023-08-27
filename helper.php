@@ -1,6 +1,7 @@
 <?php
 
     session_start();
+    
     if ($_SESSION['status'] != true || !isset($_SESSION["status"])){
         header('Location: index.php');
         exit();
@@ -23,33 +24,45 @@
                 $record1 = $result1->fetch_assoc();
                 $user_id = $record1["id"];
             } else {
-            $_SESSION["err_character"] = "You're not in database. Please contact with frontend, not backend";    
+            $_SESSION["err_character"] = "You're not in database. Sorry for problems. If you haven't created your account, page won't work without that";    
             header("DD_fight.php");
             }
             $hero_stats1 = "SELECT * FROM kaufen WHERE name = '$name1' AND user_id = '$user_id'";
             $hero_stats2 = "SELECT * FROM kaufen WHERE name = '$name2' AND user_id = '$user_id'";
-        
-            $results_array1 = [];
-            $result2 = $connection->query($hero_stats1);
-            while ($row = $result2->fetch_assoc()) {
-            //$row = array_shift($row);
-            $results_array1 = $row;
-}
-            $results_array2 = [];
-            $result3 = $connection->query($hero_stats2);
-            while ($row = $result3->fetch_assoc()) {
-            //$row = array_shift($row);
-            $results_array2 = $row;
-}
+            
+            if($result2 = $connection->query($hero_stats1)){
+                $results_array1 = [];
+                while ($row = $result2->fetch_assoc()) {
+                    if(count($row) > 0){    
+                    $results_array1 = $row;
+                    } else {
+                    $results_array1 = false;    
+                    }
+                }
+            } 
+            if($result3 = $connection->query($hero_stats2)){
+                $results_array2 = [];
+                while ($row = $result3->fetch_assoc()) {
+                    if(count($row) > 0) {
+                    $results_array2 = $row;
+                    } else {
+                    $results_array2 = false;
+                    }
+                }
+            }
+            if($results_array1 AND $results_array2){
             $_SESSION["hero1"] = $results_array1;
             $_SESSION["hero2"] = $results_array2;
-            header("Location: DD_fight.php");
-            $_SESSION['hp1'] = $_POST['hp1'];
-            $_SESSION['hp2'] = $_POST['hp2'];
-        
-        }
+            $_SESSION['hp1'] = $_POST['max_hp1'];
+            $_SESSION['hp2'] = $_POST['max_hp2'];
+            } else {
+             $_SESSION['err_2_characters'] = 'At least one of your character is not in database';   
+            }
+        }   
+            
     $connection->close();
 
+    header("Location: DD_fight.php");
     
 ?>
 
